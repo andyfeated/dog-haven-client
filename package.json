@@ -1,5 +1,5 @@
 {
-  "name": "dog-haven-v2",
+  "name": "dog-haven-client",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
