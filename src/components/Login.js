@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+import { motion } from 'framer-motion';
 import React, { useState } from 'react';
 import LoginWrapper from './LoginWrapper';
 import SignIn from './SignIn';
@@ -23,7 +23,13 @@ const Login = () => {
         </div>
       </div>
 
-      <img className='logo' width={260} height={120} src='/dog_haven_logo.png' />
+      <motion.div 
+        initial={{ y: -220, scale: 0.5}}
+        animate={{y: 30, scale: 1}}
+        transition={{type: 'spring'}}
+      >
+        <img className='logo' width={260} height={120} src='/dog_haven_logo.png' />
+      </motion.div>
     </LoginWrapper>
   );
 };

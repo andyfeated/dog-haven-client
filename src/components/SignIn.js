@@ -1,10 +1,14 @@
 import { Button, Checkbox, FormControlLabel, Link, OutlinedInput, Typography } from '@mui/material';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { motion } from 'framer-motion';
 
 const SignIn = ({ setIsSignIn }) => {  
   return (
-    <div>
+    <motion.div 
+      initial={{ opacity: 0, scale: 0.8 }} 
+      animate={{ opacity: 1, scale: 1}}
+    >
       <div className='login-label' >
         Login
       </div>
@@ -78,6 +82,8 @@ const SignIn = ({ setIsSignIn }) => {
 
       <div className="login-button">
         <Button
+          component={motion.div}
+          whileTap={{ scale: 0.9 }}
           disableElevation
           sx={{
             width: '100%',
@@ -86,7 +92,7 @@ const SignIn = ({ setIsSignIn }) => {
             borderRadius: '15px',
             textTransform: 'none',
             fontFamily: '\'Montserrat\', sans-serif'
-          }} 
+          }}
           variant='contained'
         >
           Sign In
@@ -105,7 +111,7 @@ const SignIn = ({ setIsSignIn }) => {
           <span className='highlight'> Create an account</span>
         </Link>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

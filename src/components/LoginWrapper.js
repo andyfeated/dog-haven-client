@@ -1,12 +1,14 @@
 import styled from 'styled-components';
+import { motion } from 'framer-motion';
 
-const LoginWrapper = styled.div`
+const LoginWrapper = styled(motion.div)`
   display: flex;
   flex-direction: row;
   height: 930px;
   box-sizing: border-box;
   background: url('/welcome_bg.jpeg');
   background-size: cover;
+  overflow-y: hidden;
   background-repeat: no-repeat;
   font-family: 'Montserrat', sans-serif;
 
