@@ -1,14 +1,16 @@
-import { Button, Checkbox, FormControlLabel, Link, OutlinedInput, TextField, Typography, } from '@mui/material';
-import React, { useState } from 'react';
+import { Button, Checkbox, FormControlLabel, FormHelperText, Link, OutlinedInput, TextField, Typography, } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 
 const SignUp = ({ setIsSignIn }) => {
-  const [loginDetails, setLoginDetails] = useState({ email: '', password: ''});
+  const { register, handleSubmit, formState: { errors }, getValues } = useForm();
 
-  const handleLoginSubmit = (e) => {
-    e.preventDefault();
+  const handleSignUpSubmit = (signUpData) => {
     console.log('works');
+    console.log('sign up data', signUpData);
+    console.log('error', errors);
   };
   
   return (
@@ -20,31 +22,63 @@ const SignUp = ({ setIsSignIn }) => {
         Register
       </div>
 
-      <form onSubmit={handleLoginSubmit}>
+      <form onSubmit={handleSubmit(handleSignUpSubmit)}>
         <div className='input-field'>
           <div className='input-label'>
             Email<span className='highlight'>*</span>
           </div>
 
           <OutlinedInput
+            {...register(
+              'emailInput',
+              { 
+                required: { value: true, message: 'Email is required'},
+                pattern: { value: /^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/, message: 'Invalid Email'}
+              }
+            )}
             sx={{
               width: '100%', 
               height: '52px', 
-              borderRadius: '25px',
+              borderRadius: '18px',
               fontFamily: '\'Montserrat\', sans-serif'
             }}
-            autoComplete="new-password"
+            error={errors?.emailInput ? true : false}
             placeholder="main@website.com"
             color='primary'
           />
+          {
+            errors?.emailInput 
+            && 
+            <FormHelperText 
+              style={{
+                marginBottom: -18,
+                marginTop: 5, 
+                marginLeft: 10, 
+                fontSize: 13,
+                fontWeight: 500,
+                fontFamily: '\'Montserrat\', sans-serif'
+              }}
+              error
+            >
+              {errors?.emailInput?.message}
+            </FormHelperText>
+          }
         </div>
 
         <div className='input-field'>
           <div className='input-label'>
-          Password<span className='highlight'>*</span>
+            Password<span className='highlight'>*</span>
           </div>
 
           <OutlinedInput
+            {...register(
+              'password',
+              { 
+                required: { value: true, message: 'Password is required'},
+                minLength: { value: 8, message: 'Password must have at least 8 characters'}
+              }
+            )}
+            error={errors?.password ? true : false}
             type='password'
             sx={{
               width: '100%', 
@@ -56,14 +90,42 @@ const SignUp = ({ setIsSignIn }) => {
             placeholder="Min. of 8 characters"
             color='primary' 
           />
+          {
+            errors?.password 
+            && 
+            <FormHelperText 
+              style={{
+                marginBottom: -18,
+                marginTop: 5, 
+                marginLeft: 10, 
+                fontSize: 13,
+                fontWeight: 500,
+                fontFamily: '\'Montserrat\', sans-serif'
+              }}
+              error
+            >
+              {errors?.password?.message}
+            </FormHelperText>
+          }
         </div>
 
         <div className='input-field'>
           <div className='input-label'>
-          Confirm Password<span className='highlight'>*</span>
+            Confirm Password<span className='highlight'>*</span>
           </div>
 
           <OutlinedInput 
+            {...register(
+              'confirmPassword',
+              { 
+                required: { value: true, message: 'Confirm Password is required'},
+                validate: (val => {
+                  const { password } = getValues();
+                  return password === val || 'Password does not match';
+                })
+              }
+            )}
+            error={errors?.confirmPassword ? true : false}
             type='password'
             sx={{
               width: '100%', 
@@ -74,6 +136,23 @@ const SignUp = ({ setIsSignIn }) => {
             placeholder="Enter confirmed password"
             color='primary' 
           />
+          {
+            errors?.confirmPassword 
+            && 
+            <FormHelperText 
+              style={{
+                marginBottom: -18,
+                marginTop: 5, 
+                marginLeft: 10, 
+                fontSize: 13,
+                fontWeight: 500,
+                fontFamily: '\'Montserrat\', sans-serif'
+              }}
+              error
+            >
+              {errors?.confirmPassword?.message}
+            </FormHelperText>
+          }
         </div>
 
         <div className='checkbox-section'>
@@ -90,9 +169,29 @@ const SignUp = ({ setIsSignIn }) => {
               I accept the terms of agreement
               </Typography>
             }
-            control={<Checkbox  sx={{  paddingLeft: 0}} />} 
+            control={<Checkbox {...register(
+              'agreedToTerms',
+              { required: { value: true, message: 'Please accept the terms of agreement'}}
+            )} sx={{  paddingLeft: 0}} />} 
           />
         </div>
+        {
+          errors?.agreedToTerms 
+            && 
+          <FormHelperText 
+            style={{
+              marginBottom: -5,
+              marginTop: -5, 
+              marginLeft: 10, 
+              fontSize: 13,
+              fontWeight: 500,
+              fontFamily: '\'Montserrat\', sans-serif'
+            }}
+            error
+          >
+            {errors?.agreedToTerms?.message}
+          </FormHelperText>
+        }
 
         <div className="login-button">
           <motion.div whileTap={{ scale: 0.9 }}>
