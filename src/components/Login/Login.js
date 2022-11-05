@@ -2,40 +2,41 @@ import { Alert, Snackbar } from '@mui/material';
 import { motion } from 'framer-motion';
 import React, { useState } from 'react';
 import LoginWrapper from './LoginWrapper';
-import SignIn from './SignIn';
-import SignUp from './SignUp';
+import SignIn from '../Login/SignIn';
+import SignUp from '../Login/SignUp';
 
 const Login = () => {
   const [isSignIn, setIsSignIn] = useState(true);
-  const [signUpResult, setSignUpResult] = useState({ status: '', message: ''});
+  const [authResult, setAuthResult] = useState({ status: '', message: ''});
   
   const signInOrSignUp = () => {
     if(isSignIn){
-      return <SignIn setIsSignIn={setIsSignIn} />;
+      return <SignIn setAuthResult={setAuthResult} setIsSignIn={setIsSignIn}  />;
     }
     
-    return <SignUp setSignUpResult={setSignUpResult} setIsSignIn={setIsSignIn}/>;
+    return <SignUp setAuthResult={setAuthResult} setIsSignIn={setIsSignIn}/>;
   };
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
     }
-    setSignUpResult({ status: '', message: ''});
+
+    setAuthResult({ status: '', message: ''});
   };
 
   const snackBarContent = () => {
-    if(signUpResult.status === 'success'){
+    if(authResult.status === 'success'){
       return (
         <Alert onClose={handleClose} color='primary' severity="success" sx={{ width: '100%' }}>
-          {signUpResult?.message}
+          {authResult?.message}
         </Alert>
       );
     }
 
     return (
       <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-        {signUpResult?.message}
+        {authResult?.message}
       </Alert>
     );
   };
@@ -63,7 +64,7 @@ const Login = () => {
           horizontal: 'center'
         }}
         onClose={handleClose}
-        open={signUpResult?.status} 
+        open={authResult?.status ? true : false} 
         autoHideDuration={5000}
       >
         {snackBarContent()}

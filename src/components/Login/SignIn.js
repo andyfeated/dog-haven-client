@@ -1,49 +1,47 @@
-import { 
+import {
   Button, 
   Checkbox,
-  FormControlLabel,
-  FormHelperText,
-  Link, OutlinedInput,
+  FormControlLabel, 
+  Link,
+  OutlinedInput,
   Typography,
+  FormHelperText
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
-import userServices from '../services/users';
+import { useForm } from 'react-hook-form';
+import loginServices from '../../services/login';
 
-const SignUp =   ({ setIsSignIn, setSignUpResult }) => {
+const SignIn = ({ setIsSignIn, setAuthResult }) => {  
   const { register, handleSubmit, formState: { errors }, getValues, reset } = useForm();
 
-  const handleSignUpSubmit = async (signUpData) => {
-    const { emailInput, password } = signUpData;
+  const handleSignInSubmit = async (signInData) => {
+    const { emailInput, password, rememberUser } = signInData;
     
     const input = {
       email: emailInput,
       password,
+      rememberUser
     };
 
     try{
-      await userServices.signUp(input);
-
-      setSignUpResult({ status: 'success', message: 'Account has been registered, please log in'});
-      setIsSignIn(true);
-    } catch(error){
-      setSignUpResult({ status: 'error', message: error.response.data.error});
+      const response = await loginServices.signIn(input);
+    }catch(error){
+      setAuthResult({ status: 'error', message: error.response.data.error});
     }
   };
-
-
+  
   return (
     <motion.div 
       initial={{ opacity: 0, scale: 0.8 }} 
       animate={{ opacity: 1, scale: 1}}
     >
       <div className='login-label' >
-        Register
+        Login
       </div>
 
-      <form onSubmit={handleSubmit(handleSignUpSubmit)}>
+      <form onSubmit={handleSubmit(handleSignInSubmit)}>
         <div className='input-field'>
           <div className='input-label'>
             Email<span className='highlight'>*</span>
@@ -62,15 +60,15 @@ const SignUp =   ({ setIsSignIn, setSignUpResult }) => {
               height: '52px', 
               borderRadius: '18px',
               fontFamily: '\'Montserrat\', sans-serif'
-            }}
+            }} 
             error={errors?.emailInput ? true : false}
             placeholder="main@website.com"
-            color='primary'
+            color='primary' 
           />
           {
             errors?.emailInput 
             && 
-            <FormHelperText 
+            <FormHelperText
               style={{
                 marginBottom: -18,
                 marginTop: 5, 
@@ -88,10 +86,10 @@ const SignUp =   ({ setIsSignIn, setSignUpResult }) => {
 
         <div className='input-field'>
           <div className='input-label'>
-            Password<span className='highlight'>*</span>
+              Password<span className='highlight'>*</span>
           </div>
 
-          <OutlinedInput
+          <OutlinedInput 
             {...register(
               'password',
               { 
@@ -130,89 +128,35 @@ const SignUp =   ({ setIsSignIn, setSignUpResult }) => {
           }
         </div>
 
-        <div className='input-field'>
-          <div className='input-label'>
-            Confirm Password<span className='highlight'>*</span>
-          </div>
-
-          <OutlinedInput 
-            {...register(
-              'confirmPassword',
-              { 
-                required: { value: true, message: 'Confirm Password is required'},
-                validate: (val => {
-                  const { password } = getValues();
-                  return password === val || 'Password does not match';
-                })
-              }
-            )}
-            error={errors?.confirmPassword ? true : false}
-            type='password'
-            sx={{
-              width: '100%', 
-              height: '52px', 
-              borderRadius: '18px',
-              fontFamily: '\'Montserrat\', sans-serif'
-            }} 
-            placeholder="Enter confirmed password"
-            color='primary' 
-          />
-          {
-            errors?.confirmPassword 
-            && 
-            <FormHelperText 
-              style={{
-                marginBottom: -18,
-                marginTop: 5, 
-                marginLeft: 10, 
-                fontSize: 13,
-                fontWeight: 500,
-                fontFamily: '\'Montserrat\', sans-serif'
-              }}
-              error
-            >
-              {errors?.confirmPassword?.message}
-            </FormHelperText>
-          }
-        </div>
-
         <div className='checkbox-section'>
           <FormControlLabel
             sx={{marginLeft: 0}}
             label={
-              <Typography
+              <Typography 
                 sx={{
                   fontFamily: '\'Montserrat\', sans-serif',
-                  fontWeight: 500,
-                  fontSize: 13.5
+                  fontWeight: 400,
+                  fontSize: 15
                 }}
               >
-              I accept the terms of agreement
+              Remember me
               </Typography>
             }
-            control={<Checkbox {...register(
-              'agreedToTerms',
-              { required: { value: true, message: 'Please accept the terms of agreement'}}
-            )} sx={{  paddingLeft: 0}} />} 
+            control={<Checkbox {...register('rememberUser')} sx={{  paddingLeft: 0}} />} 
           />
-        </div>
-        {
-          errors?.agreedToTerms 
-            && 
-          <FormHelperText 
-            style={{
-              marginBottom: -5,
-              marginTop: -5, 
-              marginLeft: 10, 
-              fontSize: 13,
+
+          <Typography 
+            sx={{
+              fontFamily: '\'Montserrat\', sans-serif',
+              marginTop: '0.6em',
               fontWeight: 500,
-              fontFamily: '\'Montserrat\', sans-serif'
+              fontSize: 15,
             }}
-            error
+            color='primary'
           >
-            {errors?.agreedToTerms?.message}
-          </FormHelperText>
-        }
+          Forgot Password?
+          </Typography>
+        </div>
 
         <div className="login-button">
           <motion.div whileTap={{ scale: 0.9 }}>
@@ -225,36 +169,36 @@ const SignUp =   ({ setIsSignIn, setSignUpResult }) => {
                 padding: '12px 0px',
                 borderRadius: '15px',
                 textTransform: 'none',
-                fontFamily: '\'Montserrat\', sans-serif',
-              }} 
+                fontFamily: '\'Montserrat\', sans-serif'
+              }}
               variant='contained'
             >
-          Sign Up
+              Sign In
             </Button>
           </motion.div>
         </div>
 
         <div className='login-footer'>
-          Already have an account?
+          Not registered yet?
           <Link
-            onClick={() => setIsSignIn(true)}
+            onClick={() => setIsSignIn(false)}
             sx={{
               textDecoration: 'none',
               cursor: 'pointer'
             }}
           >
-            <span className='highlight'> Log in</span>
+            <span className='highlight'> Create an account</span>
           </Link>
         </div>
+
       </form>
     </motion.div>
   );
 };
 
-SignUp.propTypes = {
+SignIn.propTypes = {
   setIsSignIn: PropTypes.func.isRequired,
-  setSignUpResult: PropTypes.func.isRequired
+  setAuthResult: PropTypes.func.isRequired
 };
 
-
-export default SignUp;
+export default SignIn;
