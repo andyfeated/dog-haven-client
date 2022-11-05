@@ -1,18 +1,39 @@
-import { Button, Checkbox, FormControlLabel, FormHelperText, Link, OutlinedInput, TextField, Typography, } from '@mui/material';
+import { 
+  Button, 
+  Checkbox,
+  FormControlLabel,
+  FormHelperText,
+  Link, OutlinedInput,
+  Typography,
+} from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
+import userServices from '../services/users';
 
-const SignUp = ({ setIsSignIn }) => {
-  const { register, handleSubmit, formState: { errors }, getValues } = useForm();
+const SignUp =   ({ setIsSignIn, setSignUpResult }) => {
+  const { register, handleSubmit, formState: { errors }, getValues, reset } = useForm();
 
-  const handleSignUpSubmit = (signUpData) => {
-    console.log('works');
-    console.log('sign up data', signUpData);
-    console.log('error', errors);
+  const handleSignUpSubmit = async (signUpData) => {
+    const { emailInput, password } = signUpData;
+    
+    const input = {
+      email: emailInput,
+      password,
+    };
+
+    try{
+      await userServices.signUp(input);
+
+      setSignUpResult({ status: 'success', message: 'Account has been registered, please log in'});
+      setIsSignIn(true);
+    } catch(error){
+      setSignUpResult({ status: 'error', message: error.response.data.error});
+    }
   };
-  
+
+
   return (
     <motion.div 
       initial={{ opacity: 0, scale: 0.8 }} 
@@ -231,7 +252,8 @@ const SignUp = ({ setIsSignIn }) => {
 };
 
 SignUp.propTypes = {
-  setIsSignIn: PropTypes.func.isRequired
+  setIsSignIn: PropTypes.func.isRequired,
+  setSignUpResult: PropTypes.func.isRequired
 };
 
 
