@@ -12,27 +12,8 @@ import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import userServices from '../../services/users';
 
-const SignUp =   ({ setIsSignIn, setAuthResult }) => {
+const SignUp =   ({ setIsSignIn, onSubmitSignUp }) => {
   const { register, handleSubmit, formState: { errors }, getValues, reset } = useForm();
-
-  const handleSignUpSubmit = async (signUpData) => {
-    const { emailInput, password } = signUpData;
-    
-    const input = {
-      email: emailInput,
-      password,
-    };
-
-    try{
-      await userServices.signUp(input);
-
-      setAuthResult({ status: 'success', message: 'Account has been registered, please log in'});
-      setIsSignIn(true);
-    } catch(error){
-      setAuthResult({ status: 'error', message: error.response.data.error});
-    }
-  };
-
 
   return (
     <motion.div 
@@ -43,7 +24,7 @@ const SignUp =   ({ setIsSignIn, setAuthResult }) => {
         Register
       </div>
 
-      <form onSubmit={handleSubmit(handleSignUpSubmit)}>
+      <form onSubmit={handleSubmit(onSubmitSignUp)}>
         <div className='input-field'>
           <div className='input-label'>
             Email<span className='highlight'>*</span>
@@ -253,7 +234,7 @@ const SignUp =   ({ setIsSignIn, setAuthResult }) => {
 
 SignUp.propTypes = {
   setIsSignIn: PropTypes.func.isRequired,
-  setAuthResult: PropTypes.func.isRequired
+  onSubmitSignUp: PropTypes.func.isRequired
 };
 
 

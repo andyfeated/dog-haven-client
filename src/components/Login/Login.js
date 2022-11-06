@@ -4,17 +4,62 @@ import React, { useState } from 'react';
 import LoginWrapper from './LoginWrapper';
 import SignIn from '../Login/SignIn';
 import SignUp from '../Login/SignUp';
+import loginServices from '../../services/login';
+import userServices from '../../services/users';
+import PropTypes from 'prop-types';
+import { Navigate, useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Login = ({ user, setUser }) => {
   const [isSignIn, setIsSignIn] = useState(true);
   const [authResult, setAuthResult] = useState({ status: '', message: ''});
+
+  const handleSignInSubmit = async (signInData) => {
+    const { emailInput, password, rememberUser } = signInData;
+    
+    const input = {
+      email: emailInput,
+      password,
+      rememberUser
+    };
+
+    try{
+      const user = await loginServices.signIn(input);
+
+      if(user.data){
+        setUser(user.data);
+        localStorage.setItem('dogHavenUser', JSON.stringify(user.data));
+      }
+    }catch(error){
+      console.log(error);
+      setAuthResult({ status: 'error', message: error.response.data.error});
+    }
+  };
+
+  const handleSignUpSubmit = async (signUpData) => {
+    const { emailInput, password } = signUpData;
+    
+    const input = {
+      email: emailInput,
+      password,
+    };
+
+    try{
+      await userServices.signUp(input);
+      setAuthResult({ status: 'success', message: 'Account has been registered, please log in'});
+      setIsSignIn(true);
+    } catch(error){
+      setAuthResult({ status: 'error', message: error.response.data.error});
+    }
+  };
   
   const signInOrSignUp = () => {
     if(isSignIn){
-      return <SignIn setAuthResult={setAuthResult} setIsSignIn={setIsSignIn}  />;
+      return (
+        <SignIn setIsSignIn={setIsSignIn} onSubmitSignIn={handleSignInSubmit} />
+      );
     }
     
-    return <SignUp setAuthResult={setAuthResult} setIsSignIn={setIsSignIn}/>;
+    return <SignUp setIsSignIn={setIsSignIn} onSubmitSignUp={handleSignUpSubmit}/>;
   };
 
   const handleClose = (event, reason) => {
@@ -43,6 +88,11 @@ const Login = () => {
   
   return (
     <LoginWrapper>
+
+      {user && (
+        <Navigate to="/home" replace={true} />
+      )}
+      
       <div className='login-section'>
         <div className='login-card'>
           {signInOrSignUp()}
@@ -71,6 +121,15 @@ const Login = () => {
       </Snackbar>
     </LoginWrapper>
   );
+};
+
+Login.defaultProps = {
+  user: null
+};
+
+Login.propTypes = {
+  user: PropTypes.object,
+  setUser: PropTypes.func.isRequired
 };
 
 export default Login;

@@ -11,26 +11,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
-import loginServices from '../../services/login';
 
-const SignIn = ({ setIsSignIn, setAuthResult }) => {  
-  const { register, handleSubmit, formState: { errors }, getValues, reset } = useForm();
 
-  const handleSignInSubmit = async (signInData) => {
-    const { emailInput, password, rememberUser } = signInData;
-    
-    const input = {
-      email: emailInput,
-      password,
-      rememberUser
-    };
-
-    try{
-      const response = await loginServices.signIn(input);
-    }catch(error){
-      setAuthResult({ status: 'error', message: error.response.data.error});
-    }
-  };
+const SignIn = ({ setIsSignIn, onSubmitSignIn }) => {  
+  const { register, handleSubmit, formState: { errors } } = useForm();
   
   return (
     <motion.div 
@@ -41,7 +25,7 @@ const SignIn = ({ setIsSignIn, setAuthResult }) => {
         Login
       </div>
 
-      <form onSubmit={handleSubmit(handleSignInSubmit)}>
+      <form onSubmit={handleSubmit(onSubmitSignIn)}>
         <div className='input-field'>
           <div className='input-label'>
             Email<span className='highlight'>*</span>
@@ -198,7 +182,7 @@ const SignIn = ({ setIsSignIn, setAuthResult }) => {
 
 SignIn.propTypes = {
   setIsSignIn: PropTypes.func.isRequired,
-  setAuthResult: PropTypes.func.isRequired
+  onSubmitSignIn: PropTypes.func.isRequired,
 };
 
 export default SignIn;
