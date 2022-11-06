@@ -1,6 +1,7 @@
 import styled from 'styled-components';
+import { motion } from 'framer-motion';
 
-const NavbarWrapper = styled.div`
+const NavbarWrapper = styled(motion.div)`
   display: flex;
   justify-content: end;
   height: 7.7%;
@@ -10,7 +11,7 @@ const NavbarWrapper = styled.div`
     display: flex;
     flex-direction: row;
     background-color: #fff;
-    width: 13.1%;
+    width: 14.1%;
     border-radius: 25px;
     margin-right: 5px;
     margin-top: 5px;

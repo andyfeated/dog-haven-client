@@ -4,7 +4,7 @@ const HomeWrapper = styled.div`
   display: flex;
   flex-direction: row;
   background-color: #FFAE12;
-  height: 930px;
+  height: 925px;
 `;
 
 export const HomeComponentWrapper = styled.div`

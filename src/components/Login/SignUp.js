@@ -6,13 +6,12 @@ import {
   Link, OutlinedInput,
   Typography,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
-import userServices from '../../services/users';
 
-const SignUp =   ({ setIsSignIn, onSubmitSignUp }) => {
+const SignUp = ({ setIsSignIn, onSubmitSignUp }) => {
   const { register, handleSubmit, formState: { errors }, getValues, reset } = useForm();
 
   return (

@@ -5,7 +5,11 @@ import SidebarWrapper from './SidebarWrapper';
 
 const Sidebar = () => {
   return (
-    <SidebarWrapper>
+    <SidebarWrapper 
+      initial={{ x: -1000}}
+      animate={{ x: 0}}
+      transition={{ ease: 'easeIn', duration: 0.5}}
+    >
       <div>
         <Tabs>
           <Tab 

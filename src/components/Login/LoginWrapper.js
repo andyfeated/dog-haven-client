@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 const LoginWrapper = styled(motion.div)`
   display: flex;
   flex-direction: row;
-  height: 930px;
+  height: 923px;
   box-sizing: border-box;
   background: url('/welcome_bg.jpeg');
   background-size: cover;

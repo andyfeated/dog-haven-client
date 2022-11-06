@@ -4,22 +4,18 @@ import Sidebar from '../Common/Sidebar/Sidebar';
 import PropTypes from 'prop-types';
 import HomeComponent from './HomeComponent';
 
-const Home = () => {
+const Home = ({ setUser }) => {
   return(
     <HomeWrapper>
       <Sidebar />
 
-      <HomeComponent />
+      <HomeComponent setUser={setUser} />
     </HomeWrapper>
   );
 };
 
-Home.defaultProps = {
-  user: null
-};
-
 Home.propTypes = {
-  user: PropTypes.object
+  setUser: PropTypes.func.isRequired
 };
 
 export default Home; 

@@ -30,7 +30,7 @@ const Login = ({ user, setUser }) => {
         localStorage.setItem('dogHavenUser', JSON.stringify(user.data));
       }
     }catch(error){
-      console.log(error);
+
       setAuthResult({ status: 'error', message: error.response.data.error});
     }
   };

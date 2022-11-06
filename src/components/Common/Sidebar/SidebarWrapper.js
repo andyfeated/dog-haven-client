@@ -1,9 +1,10 @@
 import styled from 'styled-components';
+import { motion } from 'framer-motion';
 
-const SidebarWrapper = styled.div`
+const SidebarWrapper = styled(motion.div)`
   background-color: #fff;
   height: 100%;
-  width: 20%;
+  width: 25%;
 
   .tab {
     color: #fff;
