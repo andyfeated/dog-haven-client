@@ -1,9 +1,16 @@
 import React from 'react';
+import HomeWrapper from '../Home/HomeWrapper';
+import Sidebar from '../Common/Sidebar/Sidebar';
 import PropTypes from 'prop-types';
+import HomeComponent from './HomeComponent';
 
 const Home = () => {
   return(
-    <div>h1</div>
+    <HomeWrapper>
+      <Sidebar />
+
+      <HomeComponent />
+    </HomeWrapper>
   );
 };
 
