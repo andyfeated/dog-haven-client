@@ -12,6 +12,13 @@ const SidebarWrapper = styled(motion.div)`
     font-family: 'Montserrat', sans-serif;
   }
 
+  .tabs-style {
+    .Mui-selected {
+      background-color: #f3a000;
+      color: #000;
+    }
+  }
+
   .normal-tab {
     width: 33.3%;
     font-size: 17px;
